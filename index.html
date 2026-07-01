@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nixta "Taqueria" — Brand System Sprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --text-primary: #1a1a1a;
+    --text-secondary: #444;
+    --text-muted: #888;
+    --surface-0: #f9f9f7;
+    --surface-1: #f3f2ef;
+    --surface-2: #ffffff;
+    --border: #e0ddd8;
+    --border-strong: #b0aca4;
+    --border-accent: #c8b89a;
+    --bg-accent: #fdf6ec;
+    --text-accent: #8a6230;
+    --bg-warning: #fef9ec;
+    --border-warning: #e8d49a;
+    --text-warning: #7a6020;
+    --font-sans: 'Space Grotesk', system-ui, sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+  body { background: #fafaf8; color: var(--text-primary); font-family: var(--font-sans); }
+  .nx { padding: 2.5rem 1.5rem 4rem; max-width: 720px; margin: 0 auto; }
+
+  .nx-header { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.75rem; }
+  .nx-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 3px 0; }
+  .nx-eyebrow span { white-space: nowrap; }
+  .nx-subtitle { margin: 0 0 1rem; }
+  .nx-sub-lede { font-size: 19px; font-weight: 500; color: var(--text-primary); line-height: 1.35; margin-top: 1.1rem; margin-bottom: 0.6rem; }
+  .nx-sub-body { font-size: 13.5px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 0.45rem; }
+  .nx-sub-sprint { font-size: 14px; font-weight: 500; color: var(--text-primary); line-height: 1.65; margin-top: 0.6rem; margin-bottom: 0.3rem; }
+  .nx-sub-close { font-size: 11.5px; font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); line-height: 1.65; }
+  .nx-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; padding-top: 1rem; border-top: 0.5px solid var(--border); }
+  .nx-meta-item { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); }
+  .nx-meta-item strong { color: var(--text-primary); font-weight: 500; display: block; font-size: 13px; font-family: var(--font-sans); }
+
+  .nx-vision { background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.75rem; }
+  .nx-vision-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+  .nx-vision p { font-size: 13px; color: var(--text-secondary); line-height: 1.75; }
+  .nx-vision p + p { margin-top: 10px; }
+
+  .nx-house { margin-bottom: 1.75rem; }
+  .nx-section-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.6rem; display: block; }
+  .nx-arch { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-bottom: 8px; }
+  .nx-room-group { border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 12px; background: var(--surface-1); }
+  .nx-room-group.house { border-color: var(--text-primary); background: var(--text-primary); grid-column: 1 / -1; }
+  .nx-room-name { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+  .nx-room-group.house .nx-room-name { color: #fff; }
+  .nx-room-desc { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.4; }
+  .nx-room-group.house .nx-room-desc { color: rgba(255,255,255,0.6); }
+  .nx-rooms-prefix { font-size: 12px; color: var(--text-muted); line-height: 1.65; margin-bottom: 0.75rem; font-style: italic; }
+  .nx-cross-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .nx-cross-tag { font-size: 11px; font-family: var(--font-mono); padding: 3px 10px; border-radius: 20px; background: var(--bg-warning); border: 0.5px solid var(--border-warning); color: var(--text-warning); }
+
+  .nx-week { margin-bottom: 1rem; border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .nx-week.open { border-color: var(--border-strong); }
+  .nx-week-hdr { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1.25rem; background: var(--surface-1); cursor: pointer; user-select: none; }
+  .nx-week-hdr:hover { background: var(--surface-0); }
+  .nx-wnum { font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; min-width: 24px; }
+  .nx-week.open .nx-wnum { color: var(--text-primary); }
+  .nx-wlabel { font-weight: 500; font-size: 15px; color: var(--text-primary); flex: 1; }
+  .nx-wdates { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+  .nx-chev { font-size: 12px; color: var(--text-muted); transition: transform 0.2s; }
+  .nx-week.open .nx-chev { transform: rotate(180deg); }
+  .nx-week-body { display: none; border-top: 0.5px solid var(--border); }
+  .nx-week.open .nx-week-body { display: block; }
+
+  .nx-deliverable { border-bottom: 0.5px solid var(--border); }
+  .nx-deliverable:last-child { border-bottom: none; }
+  .nx-del-hdr { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.85rem 1.25rem; cursor: pointer; background: var(--surface-2); }
+  .nx-del-hdr:hover { background: var(--surface-1); }
+  .nx-del-arrow { font-size: 11px; color: var(--text-muted); padding-top: 2px; transition: transform 0.15s; flex-shrink: 0; }
+  .nx-deliverable.open .nx-del-arrow { transform: rotate(90deg); }
+  .nx-del-title { font-size: 14px; font-weight: 500; color: var(--text-primary); flex: 1; line-height: 1.4; }
+  .nx-del-body { display: none; padding: 0 1.25rem 1rem 2.75rem; background: var(--surface-2); }
+  .nx-deliverable.open .nx-del-body { display: block; }
+  .nx-del-body p { font-size: 13px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 8px; }
+  .nx-del-body p:last-of-type { margin-bottom: 0; }
+
+  .nx-phase-out { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); padding: 0.65rem 1.25rem; border-bottom: 0.5px solid var(--border); background: var(--surface-1); }
+  .nx-phase-out strong { color: var(--text-secondary); font-style: normal; }
+  .nx-cadence { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); padding: 0.65rem 1.25rem; background: var(--surface-2); }
+
+  .nx-footer { margin-top: 2rem; padding-top: 1.25rem; border-top: 0.5px solid var(--border); }
+  .nx-footer-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+  .nx-fpill { font-size: 12px; font-family: var(--font-mono); padding: 4px 12px; border-radius: 20px; background: var(--bg-warning); border: 0.5px solid var(--border-warning); color: var(--text-warning); }
+
+  @media (max-width: 600px) {
+    .nx { padding: 1.25rem 1rem 3rem; }
+    .nx-header { padding: 1rem; border-radius: 10px; }
+    .nx-sub-lede { font-size: 16px; margin-top: 0.85rem; }
+    .nx-sub-body { font-size: 13px; }
+    .nx-sub-sprint { font-size: 13.5px; }
+    .nx-sub-close { font-size: 11px; }
+    .nx-meta { gap: 1rem; }
+    .nx-vision { padding: 1rem; border-radius: 10px; }
+    .nx-week { border-radius: 10px; }
+    .nx-week-hdr { padding: 0.85rem 1rem; gap: 0.5rem; }
+    .nx-wlabel { font-size: 14px; }
+    .nx-wdates { display: none; }
+    .nx-del-hdr { padding: 0.75rem 1rem; }
+    .nx-del-body { padding: 0 1rem 0.85rem 2rem; }
+    .nx-del-body p { font-size: 12.5px; }
+    .nx-phase-out { padding: 0.6rem 1rem; }
+    .nx-cadence { padding: 0.6rem 1rem; font-size: 10.5px; }
+    .nx-room-group { border-radius: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="nx">
+
+  <div class="nx-header">
+    <p class="nx-eyebrow"><span>Nixta "Taqueria"</span><span>5-week brand design sprint</span><span>roadmap</span><span>summer 2026</span></p>
+    <div class="nx-subtitle">
+      <p class="nx-sub-lede">Nixta has a brand. Seven years of it, built organically and with a lot of sweat.</p>
+      <p class="nx-sub-body">A feel, a vibe, an identity - started but not finished. <em>More logos, lockups, colors added over time</em> - and then, quietly, a whole world. One that's still growing.</p>
+      <p class="nx-sub-body">And right now it lives everywhere - across platforms, in physical space, on walls, on menus, in people's heads - reinvented every time someone makes something.</p>
+      <p class="nx-sub-sprint">This sprint changes that with one source of truth for how Nixta looks, sounds, and moves, built so any team member can understand the brand and express it confidently. In their design tool (Canva), in a conversation, in a collab, in a room.</p>
+      <p class="nx-sub-close">So every post, menu, drop, pop-up, and future release pulls in the same direction - and has a reason to exist. Internally and externally, physically and digitally.</p>
+    </div>
+    <div class="nx-meta">
+      <div class="nx-meta-item"><strong>Little Benny LLC</strong>brand strategy, identity & design</div>
+      <div class="nx-meta-item"><strong>5 week sprint</strong>Jun 29 → Aug 1</div>
+      <div class="nx-meta-item"><strong>$1,000 / week</strong>billed weekly</div>
+    </div>
+  </div>
+
+  <div class="nx-vision">
+    <p class="nx-vision-label">What Nixta is | the thread that ties everything together</p>
+    <p>Nixta "Taqueria," built in real time by Rico Suave &amp; Bigi Smalls, and the team behind it. Two proud creators - one Mexican-American, one Iranian-American. Edgar commands the kitchen. Sara runs the world. Between them: strong lineage, a fantastic palate, and a taqueria that made TIME100.</p>
+    <p>When Winter Storm Uri hit Austin in 2021 and thousands were without food or heat, Nixta and the Taco Mafia didn't wait - they cooked 3,000 free meals and showed up for their neighbors. The community fridge out front carries the tagline "Solidarity, Not Charity."</p>
+    <p>This is what the brand is actually built on. The design system we're creating needs to hold all of that - the silly and the serious, the ancestral and the unhinged.</p>
+  </div>
+
+  <div class="nx-house">
+    <span class="nx-section-label">The house and its rooms</span>
+    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0.85rem; line-height: 1.6;">A first pass at how I see the world of Nixta mapped - the house, the rooms, and how they might connect. <span style="font-weight: 500; color: var(--text-primary);">Please flag anything that's off, missing, or that doesn't match how you'd describe it. And if there's copy, messaging, or language you've always loved or lived by - send it. The more we understand how Nixta talks about itself, the sharper the narrative gets.</span></p>
+    <div class="nx-arch">
+      <div class="nx-room-group house">
+        <div class="nx-room-name">Nixta "Taqueria"</div>
+        <div class="nx-room-desc">the house · everything comes from here</div>
+      </div>
+    </div>
+    <p class="nx-rooms-prefix">Each of the following is a room in the house. Some have the lights on, some are in constant change and some warming up - but every room exists, every room has a name, and every room belongs.</p>
+    <div class="nx-arch">
+      <div class="nx-room-group">
+        <div class="nx-room-name">Xakali</div>
+        <div class="nx-room-desc">tasting menu · the intimate space</div>
+      </div>
+      <div class="nx-room-group">
+        <div class="nx-room-name">Xolovino</div>
+        <div class="nx-room-desc">natural wine club · experiential collective education (program · pop-up)</div>
+      </div>
+      <div class="nx-room-group">
+        <div class="nx-room-name">Friendlys</div>
+        <div class="nx-room-desc">Sara's Baba's cafe remix · home meeting homeland (program · pop-up)</div>
+      </div>
+    </div>
+    <div class="nx-arch">
+      <div class="nx-room-group">
+        <div class="nx-room-name">Community / Movement</div>
+        <div class="nx-room-desc">Taco Mafia · PBS docuseries · mutual aid</div>
+      </div>
+      <div class="nx-room-group">
+        <div class="nx-room-name">Publishing / IP</div>
+        <div class="nx-room-desc">From Tacos to Tahdig · NASA 2027 · future editorial</div>
+      </div>
+      <div class="nx-room-group">
+        <div class="nx-room-name">"Guest Room"</div>
+        <div class="nx-room-desc">brand partnerships · guest chefs · outside creative</div>
+      </div>
+    </div>
+    <div class="nx-arch">
+      <div class="nx-room-group" style="grid-column: 1 / -1;">
+        <div class="nx-room-name">Merch + Collabs</div>
+        <div class="nx-room-desc">lives across every room, if applicable</div>
+      </div>
+    </div>
+  </div>
+
+  <span class="nx-section-label">Phases — click to expand, click any item to learn more</span>
+
+  <!-- PHASE 01 -->
+  <div class="nx-week open" id="w1">
+    <div class="nx-week-hdr" onclick="toggleWeek('w1')">
+      <span class="nx-wnum">P01 · W1</span>
+      <span class="nx-wlabel">Discovery + Audit</span>
+      <span class="nx-wdates">Jun 29–Jul 4</span>
+      <span class="nx-chev">▾</span>
+    </div>
+    <div class="nx-week-body">
+      <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.75; padding: 0.85rem 1.25rem; border-bottom: 0.5px solid var(--border);">This is where we are. We dig into what Nixta actually has, what it's been saying, and what the architecture looks like mapped out on paper - then chart how it all connects and where it grows from here. Everything built in weeks 2-5 stands on this.</p>
+      <div class="nx-deliverable" id="d1a">
+        <div class="nx-del-hdr" onclick="toggleDel('d1a')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Full asset audit</span></div>
+        <div class="nx-del-body"><p>Everything Nixta has ever made - Canva, Squarespace, socials, drive - pulled together.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d1b">
+        <div class="nx-del-hdr" onclick="toggleDel('d1b')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Brand architecture, on paper</span></div>
+        <div class="nx-del-body"><p>Nixta "Taqueria" is the house. Xakali, Xolovino, Friendlys, Community/Movement, Publishing/IP, and the "Guest Room" are the rooms. Each has its own reason to exist, its own personality - but they all share the same DNA and come from the same place. On paper, clearly, so we're all building from the same world.</p><p>This is where each room gets its defining one-liner: what it is, why it exists, and how it connects back to the house. That language becomes the foundation Phase 3 builds on.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d1c">
+        <div class="nx-del-hdr" onclick="toggleDel('d1c')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Site + presence review</span></div>
+        <div class="nx-del-body"><p>Fresh eyes on nixtataqueria.com and every public-facing platform. What does Nixta say about itself? What's working, what's off, what's missing entirely?</p></div>
+      </div>
+      <p class="nx-phase-out"><strong>Output:</strong> full asset inventory · brand architecture document · platform notes</p>
+      <p class="nx-cadence">Fri Jul 4: delivery EOD · Mon Jul 7: feedback due EOD · Tue Jul 8: revisions + sign-off → Phase 2</p>
+    </div>
+  </div>
+
+  <!-- PHASE 02 -->
+  <div class="nx-week" id="w2">
+    <div class="nx-week-hdr" onclick="toggleWeek('w2')">
+      <span class="nx-wnum">P02 · W2</span>
+      <span class="nx-wlabel">Identity — Nixta "Taqueria"</span>
+      <span class="nx-wdates">Jul 7–11</span>
+      <span class="nx-chev">▾</span>
+    </div>
+    <div class="nx-week-body">
+      <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.75; padding: 0.85rem 1.25rem; border-bottom: 0.5px solid var(--border);">We establish the Nixta "Taqueria" identity system that everything else plugs into - it's the connective tissue.</p>
+      <div class="nx-deliverable" id="d2a">
+        <div class="nx-del-hdr" onclick="toggleDel('d2a')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Voice + Tone</span></div>
+        <div class="nx-del-body"><p>Nixta already has a voice - warm, funny, irreverent, deeply rooted in the culture it comes from and the community it belongs to. Seven years in Austin, Texas is no small thing.</p><p>Now we document it so it holds across a menu, an IG post, a press release, or a new hire writing emails. The freeze, the fridge, the Taco Mafia, the mutual aid - that thread lives here too. That's the soul of it.</p><p>James Beard. MICHELIN. Obama, Jay-Z, Beyoncé, Anne Hathaway. The State Department's Culinary Corps. Showing up for the neighborhood and for the world.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d2b">
+        <div class="nx-del-hdr" onclick="toggleDel('d2b')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Color</span></div>
+        <div class="nx-del-body"><p>Lock the official Nixta palette - defined, named, documented - and establish how it travels into each room.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d2c">
+        <div class="nx-del-hdr" onclick="toggleDel('d2c')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Typography</span></div>
+        <div class="nx-del-body"><p>Define the type system - what's universal, what's specific to each room, and how hierarchy works across every touchpoint from headings to captions.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d2d">
+        <div class="nx-del-hdr" onclick="toggleDel('d2d')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Logo Rules</span></div>
+        <div class="nx-del-body"><p>A few lockups exist, and so does the Corn Man! The rules we define here determine what, how, when, and where each one shows up.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d2e">
+        <div class="nx-del-hdr" onclick="toggleDel('d2e')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">First Visual Direction</span></div>
+        <div class="nx-del-body"><p>An early look - not polished, but pointed. Gut check before we go deep. Full imagery direction lives in Phase 3.</p></div>
+      </div>
+      <p class="nx-phase-out"><strong>Output:</strong> voice and tone guide · color palette · type system · logo usage guide</p>
+      <p class="nx-cadence">Fri Jul 11: delivery EOD · Mon Jul 14: feedback due EOD · Tue Jul 15: revisions + sign-off → Phase 3</p>
+    </div>
+  </div>
+
+  <!-- PHASE 03 -->
+  <div class="nx-week" id="w3">
+    <div class="nx-week-hdr" onclick="toggleWeek('w3')">
+      <span class="nx-wnum">P03 · W3</span>
+      <span class="nx-wlabel">The Rooms</span>
+      <span class="nx-wdates">Jul 14–18</span>
+      <span class="nx-chev">▾</span>
+    </div>
+    <div class="nx-week-body">
+      <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.75; padding: 0.85rem 1.25rem; border-bottom: 0.5px solid var(--border);">The house foundation has been established. <em>Now we build room by room - distinct enough to stand alone, connected enough that you know exactly which house they came from.</em> The sub-brands get their visual identity and every other room gets clarity on how it operates and connects.</p>
+      <p style="font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 0.7rem 1.25rem 0.3rem;">Sub-brand Rooms</p>
+      <div class="nx-deliverable" id="d3a">
+        <div class="nx-del-hdr" onclick="toggleDel('d3a')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Xakali</span></div>
+        <div class="nx-del-body"><p>"Small shelter." same physical space as Nixta, different energy, different culinary intention. Visual direction that holds its own tension - distinct spatial habitat, but unmistakably part of the house.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d3b">
+        <div class="nx-del-hdr" onclick="toggleDel('d3b')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Xolovino</span></div>
+        <div class="nx-del-body"><p>Has it's own look and feel - distinct enough to travel, scale, collab and carry merch, while always pointing back to the house's wavy-fun side.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d3c">
+        <div class="nx-del-hdr" onclick="toggleDel('d3c')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Friendlys</span></div>
+        <div class="nx-del-body"><p>Its own look and feel - intentional storytelling, travels, scales, can carry merch, while always pointing back to the house.</p></div>
+      </div>
+      <p style="font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 0.7rem 1.25rem 0.3rem; border-top: 0.5px solid var(--border);">Rooms</p>
+      <div class="nx-deliverable" id="d3d">
+        <div class="nx-del-hdr" onclick="toggleDel('d3d')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Community / Movement</span></div>
+        <div class="nx-del-body"><p>Not a sub-brand - a way of operating. A way of living the brand's ethos. The freeze, the fridge, the Taco Mafia, the mutual aid. And every activation and future expression of this spirit lives here.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d3e">
+        <div class="nx-del-hdr" onclick="toggleDel('d3e')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Publishing / IP</span></div>
+        <div class="nx-del-body"><p>From Tacos to Tahdig (October 6, Penguin Random House) is not directly merch nor a collab - it's a cultural artifact. <em>That could become merch and collabs.</em> This room holds the first book, the NASA 2027 project, and anything Nixta puts into the world as a permanent cultural object, virtually or physically.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d3f">
+        <div class="nx-del-hdr" onclick="toggleDel('d3f')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">"Guest Room"</span></div>
+        <div class="nx-del-body"><p>Brand partnerships, guest chefs, outside creative. The framework for how Nixta shows up inside someone else's world - and how guests show up in Nixta's - without the house losing itself.</p></div>
+      </div>
+      <p style="font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 0.7rem 1.25rem 0.3rem; border-top: 0.5px solid var(--border);">Systems</p>
+      <div class="nx-deliverable" id="d3g">
+        <div class="nx-del-hdr" onclick="toggleDel('d3g')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Signage direction</span></div>
+        <div class="nx-del-body"><p>How the brand lives in physical space - exterior and interior. Part of the spatial architecture, thoughtful, not precious and not an afterthought.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d3h">
+        <div class="nx-del-hdr" onclick="toggleDel('d3h')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Menu system + imagery direction</span></div>
+        <div class="nx-del-body"><p>Menus are one of Nixta's highest-traffic brand touchpoints. We build a template system - <em>fast to update, consistent in feel, unmistakably from the house no matter which room it's serving.</em> Imagery direction covers illustration, photography style, and visual mood across all platforms.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d3i">
+        <div class="nx-del-hdr" onclick="toggleDel('d3i')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Merch + Collabs</span></div>
+        <div class="nx-del-body"><p>The system that runs across the house. We define what a Nixta drop looks like, how a collab is framed, and how any room can extend into something physical, digital, or collaborative without losing the house.</p></div>
+      </div>
+      <p class="nx-phase-out"><strong>Output:</strong> sub-brand one-pagers · room definitions · menu template system · imagery direction · signage direction</p>
+      <p class="nx-cadence">Fri Jul 18: delivery EOD · Mon Jul 21: feedback due EOD · Tue Jul 22: revisions + sign-off → Phase 4</p>
+    </div>
+  </div>
+
+  <!-- PHASE 04 -->
+  <div class="nx-week" id="w4">
+    <div class="nx-week-hdr" onclick="toggleWeek('w4')">
+      <span class="nx-wnum">P04 · W4</span>
+      <span class="nx-wlabel">Brand Guidelines + Web Strategy</span>
+      <span class="nx-wdates">Jul 21–25</span>
+      <span class="nx-chev">▾</span>
+    </div>
+    <div class="nx-week-body">
+      <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.75; padding: 0.85rem 1.25rem; border-bottom: 0.5px solid var(--border);">This is the document you hand a new designer (or Canva-savvy person), a social media manager, a collaborator, a publisher, a team member - and they immediately understand how Nixta shows up in the world without having to ask. A recipe card for the whole universe. Alongside it, we define and map the web architecture.</p>
+
+      <!-- BRAND GUIDELINES -->
+      <p style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); padding: 0.75rem 1.25rem 0.25rem; border-bottom: 0.5px solid var(--border);">Brand Guidelines</p>
+
+      <div class="nx-deliverable" id="d4a">
+        <div class="nx-del-hdr" onclick="toggleDel('d4a')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Cover + intro</span></div>
+        <div class="nx-del-body"><p>Written in Nixta's voice and spirit - woven into a clear, human statement of identity. Sets the tone for everything that follows.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d4b">
+        <div class="nx-del-hdr" onclick="toggleDel('d4b')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">All systems, compiled</span></div>
+        <div class="nx-del-body"><p>Everything from Phases 2 and 3 - color, type, logo, voice, imagery, sub-brands - annotated and designed so it's clear to anyone, not just designers.</p></div>
+      </div>
+
+      <!-- WEB STRATEGY -->
+      <p style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); padding: 0.75rem 1.25rem 0.25rem; border-bottom: 0.5px solid var(--border);">Web Strategy</p>
+
+      <div class="nx-deliverable" id="d4c">
+        <div class="nx-del-hdr" onclick="toggleDel('d4c')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Ecosystem map</span></div>
+        <div class="nx-del-body"><p>How does someone find Xakali from the main site? Where does Xolovino live? Right now the site is a restaurant. After this sprint it can be a whole world so let's map the full ecosystem and define what belongs on nixtataqueria.com - and what doesn't.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d4d">
+        <div class="nx-del-hdr" onclick="toggleDel('d4d')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Site architecture</span></div>
+        <div class="nx-del-body"><p>What lives on the site, where, how and why. The strategic foundation so the next phase of nixtataqueria.com has a clear direction to build from.</p></div>
+      </div>
+
+      <p class="nx-phase-out"><strong>Output:</strong> brand guidelines deck · ecosystem map · site architecture document</p>
+      <p class="nx-cadence">Fri Jul 25: delivery EOD · Mon Jul 28: feedback due EOD · Tue Jul 29: revisions + sign-off → Phase 5</p>
+    </div>
+  </div>
+
+  <!-- PHASE 05 -->
+  <div class="nx-week" id="w5">
+    <div class="nx-week-hdr" onclick="toggleWeek('w5')">
+      <span class="nx-wnum">P05 · W5</span>
+      <span class="nx-wlabel">Web Refinement + Handoff</span>
+      <span class="nx-wdates">Jul 28–Aug 1</span>
+      <span class="nx-chev">▾</span>
+    </div>
+    <div class="nx-week-body">
+      <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.75; padding: 0.85rem 1.25rem; border-bottom: 0.5px solid var(--border);">The strategy is set. In this final phase for this sprint, we build the user flow, refine everything, and hand it all off - organized, labeled, and ready whenever ready to build from.</p>
+
+      <div class="nx-deliverable" id="d5a">
+        <div class="nx-del-hdr" onclick="toggleDel('d5a')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">User flow</span></div>
+        <div class="nx-del-body"><p>The blueprint for how someone moves through the world of Nixta online - from landing to discovery, "room by room."</p></div>
+      </div>
+      <div class="nx-deliverable" id="d5b">
+        <div class="nx-del-hdr" onclick="toggleDel('d5b')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Refinement</span></div>
+        <div class="nx-del-body"><p>Final pass across all deliverables. Tightened, consistent, ready.</p></div>
+      </div>
+      <div class="nx-deliverable" id="d5c">
+        <div class="nx-del-hdr" onclick="toggleDel('d5c')"><span class="nx-del-arrow">▶</span><span class="nx-del-title">Final handoff package</span></div>
+        <div class="nx-del-body"><p>Everything organized, labeled, and ready to use. Fonts, files, the guidelines deck, all assets.</p></div>
+      </div>
+
+      <p class="nx-phase-out"><strong>Output:</strong> user flow · complete handoff package</p>
+      <p class="nx-cadence">Fri Aug 1: delivery EOD · Mon Aug 4: final feedback + sign-off due EOD</p>
+    </div>
+  </div>
+
+  <div class="nx-footer">
+    <span class="nx-section-label">Separate scope — priced independently</span>
+    <div class="nx-footer-pills">
+      <span class="nx-fpill">cookbook tour graphics (4-5 pieces)</span>
+      <span class="nx-fpill">Specific Squarespace newsletter template IF STILL NEEDED</span>
+    </div>
+  </div>
+
+</div>
+<script>
+function toggleWeek(id) { document.getElementById(id).classList.toggle('open'); }
+function toggleDel(id) { document.getElementById(id).classList.toggle('open'); }
+</script>
+</body>
+</html>
