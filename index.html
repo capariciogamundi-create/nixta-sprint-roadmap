@@ -189,7 +189,7 @@
   <span class="nx-section-label">Phases — click to expand, click any item to learn more</span>
 
   <!-- PHASE 01 -->
-  <div class="nx-week open" id="w1">
+  <div class="nx-week" id="w1">
     <div class="nx-week-hdr" onclick="toggleWeek('w1')">
       <span class="nx-wnum">P01 · W1</span>
       <span class="nx-wlabel">Discovery + Audit</span>
@@ -385,9 +385,6 @@
 <script>
 function toggleWeek(id) { document.getElementById(id).classList.toggle('open'); }
 function toggleDel(id) { document.getElementById(id).classList.toggle('open'); }
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('w1').classList.add('open');
-});
 </script>
 </body>
 </html>
